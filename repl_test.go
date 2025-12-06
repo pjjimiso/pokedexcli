@@ -11,10 +11,21 @@ func TestCleanInput(t *testing.T) {
         expected    []string
     }{
         {
+            input: "  ", 
+            expected: []string{},
+        },
+        {
+            input:  "hello",
+            expected: []string{"hello"},
+        },
+        {
             input:  " hello world ",
             expected: []string{"hello", "world"},
         },
-        // add more cases here
+        {
+            input: " HeLLo WoRLd ", 
+            expected: []string{"hello", "world"}, 
+        },
     }
 
     for _, c := range cases {
@@ -34,11 +45,3 @@ func TestCleanInput(t *testing.T) {
     }
 }
 
-/*
-func TestGetInput(t *testing.T) { 
-    cases := []struct { 
-        input       string
-        expected    []string
-    }
-}
-*/
