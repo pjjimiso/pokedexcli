@@ -36,8 +36,14 @@ func getCommands() map[string]cliCommand {
         },
         "map": {
             name:           "map", 
-            description:    "Paginates through location areas (20 per page)",
+            description:    "Paginates forwards through location areas (20 per page)",
             callback:       commandMap,
+            config:         &config,
+        },
+        "mapb": {
+            name:           "mapb",
+            description:    "Paginates backwards through location areas (20 per page)",
+            callback:       commandMapb,
             config:         &config,
         },
     }
@@ -45,15 +51,14 @@ func getCommands() map[string]cliCommand {
 
 
 func startRepl() { 
-    url := "https://pokeapi.co/api/v2/location-area"
-    config.Next = url
+    config.Next = "https://pokeapi.co/api/v2/location-area"
 
     scanner := bufio.NewScanner(os.Stdin)
 
     for {
         fmt.Printf("Pokedex > ")
         scanner.Scan()
-        
+
         if err := scanner.Err(); err != nil { 
             fmt.Errorf("error scanning input string: %w", err)
             continue
@@ -63,7 +68,7 @@ func startRepl() {
         if len(words) == 0 { 
             continue 
         }
-        
+
         commandName := words[0]
 
         command, exists := getCommands()[commandName]

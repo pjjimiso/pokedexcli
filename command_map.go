@@ -8,9 +8,8 @@ import (
 )
 
 
-func getMap() (locationAreaMap, error) {
-
-    res, err := http.Get(config.Next)
+func getMap(url string) (locationAreaMap, error) {
+    res, err := http.Get(url)
     if err != nil { 
         return locationAreaMap{}, err
     }
@@ -20,12 +19,15 @@ func getMap() (locationAreaMap, error) {
     if err != nil { 
         return locationAreaMap{}, err
     }
-    
+
     locationMap := locationAreaMap{}
     err = json.Unmarshal(jsonData, &locationMap)
     if err != nil { 
         return locationAreaMap{}, err
     }
+
+    config.Next = locationMap.Next
+    config.Previous = locationMap.Previous
 
     return locationMap, nil
 }
@@ -40,16 +42,28 @@ func printMap(laMap locationAreaMap) {
 }
 
 func commandMap() error { 
-
-    laMap, err := getMap() 
+    laMap, err := getMap(config.Next) 
     if err != nil { 
         return err
     }
-    
-    config.Next = laMap.Next
-    config.Previous = laMap.Previous
 
     printMap(laMap) 
+
+    return nil
+}
+
+func commandMapb() error {
+    if config.Previous == "" {
+        fmt.Println("you're on the first page")
+        return nil
+    }
+
+    laMap, err := getMap(config.Previous)
+    if err != nil { 
+        return err
+    }
+
+    printMap(laMap)
 
     return nil
 }
