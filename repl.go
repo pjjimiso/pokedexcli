@@ -8,16 +8,9 @@ import (
 )
 
 
-type cliCommand struct { 
-    name        string
-    description string
-    callback    func() error
-    config      *Config
-}
-
 var config = Config{
-    Next: "",
-    Previous: "",
+    Next:       nil,
+    Previous:   nil,
 }
 
 func getCommands() map[string]cliCommand { 
@@ -51,7 +44,8 @@ func getCommands() map[string]cliCommand {
 
 
 func startRepl() { 
-    config.Next = "https://pokeapi.co/api/v2/location-area"
+    url := "https://pokeapi.co/api/v2/location-area"
+    config.Next = &url
 
     scanner := bufio.NewScanner(os.Stdin)
 

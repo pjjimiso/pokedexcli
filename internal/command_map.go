@@ -26,23 +26,25 @@ func getMap(url string) (locationAreaMap, error) {
         return locationAreaMap{}, err
     }
 
-    config.Next = locationMap.Next
-    config.Previous = locationMap.Previous
+    config.Next = &locationMap.Next
+    config.Previous = &locationMap.Previous
 
     return locationMap, nil
 }
 
 func printMap(laMap locationAreaMap) {
-    fmt.Println("Next page:", laMap.Next) 
-    fmt.Println("Previous page:", laMap.Previous) 
-
     for _, location := range laMap.Results { 
         fmt.Println(location.Name)
     }
 }
 
 func commandMap() error { 
-    laMap, err := getMap(config.Next) 
+    if config.Next == nil || *config.Next == "" { 
+        fmt.Println("you're on the last page")
+        return nil
+    }
+
+    laMap, err := getMap(*config.Next) 
     if err != nil { 
         return err
     }
@@ -53,12 +55,12 @@ func commandMap() error {
 }
 
 func commandMapb() error {
-    if config.Previous == "" {
+    if config.Previous == nil || *config.Previous == "" {
         fmt.Println("you're on the first page")
         return nil
     }
 
-    laMap, err := getMap(config.Previous)
+    laMap, err := getMap(*config.Previous)
     if err != nil { 
         return err
     }
