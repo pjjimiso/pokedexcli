@@ -5,12 +5,20 @@ import (
     "bufio"
     "os"
     "fmt"
+    "github.com/pjjimiso/pokedexcli/internal/pokeapi"
 )
 
 
-var config = Config{
-    Next:       nil,
-    Previous:   nil,
+type config struct { 
+    pokeapiClient       pokeapi.Client
+    nextLocationsURL    *string
+    prevLocationsURL    *string
+}
+
+type cliCommand struct { 
+    name        string
+    description string
+    callback    func(*config) error
 }
 
 func getCommands() map[string]cliCommand { 
@@ -19,34 +27,27 @@ func getCommands() map[string]cliCommand {
             name:           "exit", 
             description:    "Exit the Pokedex",
             callback:       commandExit,
-            config:         &config,
         },
         "help": {
             name:           "help",
             description:    "Displays a help message",
             callback:       commandHelp,
-            config:         &config,
         },
         "map": {
             name:           "map", 
             description:    "Paginates forwards through location areas (20 per page)",
             callback:       commandMap,
-            config:         &config,
         },
         "mapb": {
             name:           "mapb",
             description:    "Paginates backwards through location areas (20 per page)",
             callback:       commandMapb,
-            config:         &config,
         },
     }
 }
 
 
-func startRepl() { 
-    url := "https://pokeapi.co/api/v2/location-area"
-    config.Next = &url
-
+func startRepl(cfg *config) { 
     scanner := bufio.NewScanner(os.Stdin)
 
     for {
@@ -67,9 +68,9 @@ func startRepl() {
 
         command, exists := getCommands()[commandName]
         if exists {
-            err := command.callback()
+            err := command.callback(cfg)
             if err != nil { 
-                fmt.Errorf("error running command: %w", err)
+                fmt.Println(err)
             }
             continue
         } else {
