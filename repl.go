@@ -5,12 +5,15 @@ import (
     "bufio"
     "os"
     "fmt"
+
     "github.com/pjjimiso/pokedexcli/internal/pokeapi"
+    "github.com/pjjimiso/pokedexcli/internal/pokecache"
 )
 
 
 type config struct { 
     pokeapiClient       pokeapi.Client
+    pokeapiCache        *pokecache.Cache
     nextLocationsURL    *string
     prevLocationsURL    *string
 }

@@ -31,6 +31,8 @@ func (c *Client) GetLocationAreas(pageURL *string) (locationAreaMap, error) {
         return locationAreaMap{}, err
     }
 
+    // do something with the cache
+
     locationMap := locationAreaMap{}
     err = json.Unmarshal(jsonData, &locationMap)
     if err != nil { 
