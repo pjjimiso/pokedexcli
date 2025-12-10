@@ -17,12 +17,21 @@ type Cache struct {
 }
 
 func (c *Cache) Add(key string, val []byte) {
-    // adds new entry to the cache
+    c.Lock()
+    newEntry := cacheEntry{
+	createdAt: time.Now(),
+	val: val,
+    }
+    c.cache[key] = newEntry
+    c.Unlock()
 }
 
 func (c *Cache) Get(key string) ([]byte, bool) {
-    // gets an entry from the cache
-    // return true if exists, false otherwise
+    _, exists := c.cache[key]
+    if exists {
+	return c.cache[key].val, true
+    }
+
     return []byte{}, false
 }
 
@@ -31,5 +40,7 @@ func (c *Cache) reapLoop() {
 }
 
 func NewCache(interval time.Duration) *Cache {
-    return &Cache{}
+    newCache := &Cache{}
+    newCache.cache = map[string]cacheEntry{}
+    return newCache
 }

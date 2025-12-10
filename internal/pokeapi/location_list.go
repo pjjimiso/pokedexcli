@@ -5,33 +5,30 @@ import (
     "encoding/json"
     "io"
     "net/http"
+    "fmt"
 )
 
 
-func (c *Client) GetLocationAreas(pageURL *string) (locationAreaMap, error) {
+func (c *Client) ListLocationAreas(pageURL *string) (locationAreaMap, error) {
     url := baseURL + "/location-area"
 
     if pageURL != nil { 
         url = *pageURL
     }
 
-    req, err := http.NewRequest("GET", url, nil)
-    if err != nil { 
-        return locationAreaMap{}, err
-    }
+    var err error
 
-    res, err := c.httpClient.Do(req)
-    if err != nil { 
-        return locationAreaMap{}, err
+    jsonData, exists := c.cache.Get(url)
+    if !exists {
+        fmt.Println("Cache entry doesn't exist, running http get request")
+        jsonData, err = c.getLocationsFromHTTP(url)
+        if err != nil { 
+            return locationAreaMap{}, err
+        }
+        c.cache.Add(url, jsonData)
+    } else {
+        fmt.Println("Cache entry exists, Yay!")
     }
-    defer res.Body.Close()
-
-    jsonData, err := io.ReadAll(res.Body)
-    if err != nil { 
-        return locationAreaMap{}, err
-    }
-
-    // do something with the cache
 
     locationMap := locationAreaMap{}
     err = json.Unmarshal(jsonData, &locationMap)
@@ -40,4 +37,24 @@ func (c *Client) GetLocationAreas(pageURL *string) (locationAreaMap, error) {
     }
 
     return locationMap, nil
+}
+
+func (c *Client) getLocationsFromHTTP(url string) ([]byte, error) {
+    req, err := http.NewRequest("GET", url, nil)
+    if err != nil { 
+        return []byte{}, err
+    }
+
+    res, err := c.httpClient.Do(req)
+    if err != nil { 
+        return []byte{}, err
+    }
+    defer res.Body.Close()
+    
+    jsonData, err := io.ReadAll(res.Body)
+    if err != nil { 
+        return []byte{}, err
+    }
+
+    return jsonData, nil
 }

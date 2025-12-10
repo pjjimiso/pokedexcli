@@ -7,7 +7,7 @@ import (
 
 
 func commandMap(cfg *config) error { 
-    laMap, err := cfg.pokeapiClient.GetLocationAreas(cfg.nextLocationsURL) 
+    laMap, err := cfg.pokeapiClient.ListLocationAreas(cfg.nextLocationsURL)
     if err != nil { 
         return err
     }
@@ -15,7 +15,6 @@ func commandMap(cfg *config) error {
     cfg.nextLocationsURL = laMap.Next
     cfg.prevLocationsURL = laMap.Previous
 
-    //printMap(laMap) 
     for _, location := range laMap.Results { 
         fmt.Println(location.Name)
     }
@@ -28,7 +27,7 @@ func commandMapb(cfg *config) error {
         return errors.New("you're on the first page")
     }
 
-    laMap, err := cfg.pokeapiClient.GetLocationAreas(cfg.prevLocationsURL)
+    laMap, err := cfg.pokeapiClient.ListLocationAreas(cfg.prevLocationsURL)
     if err != nil { 
         return err
     }
@@ -36,7 +35,6 @@ func commandMapb(cfg *config) error {
     cfg.nextLocationsURL = laMap.Next
     cfg.prevLocationsURL = laMap.Previous
 
-    //printMap(laMap)
     for _, location := range laMap.Results { 
         fmt.Println(location.Name)
     }
