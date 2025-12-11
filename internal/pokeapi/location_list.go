@@ -5,7 +5,6 @@ import (
     "encoding/json"
     "io"
     "net/http"
-    "fmt"
 )
 
 
@@ -20,14 +19,11 @@ func (c *Client) ListLocationAreas(pageURL *string) (locationAreaMap, error) {
 
     jsonData, exists := c.cache.Get(url)
     if !exists {
-        fmt.Println("Cache entry doesn't exist, running http get request")
         jsonData, err = c.getLocationsFromHTTP(url)
         if err != nil { 
             return locationAreaMap{}, err
         }
         c.cache.Add(url, jsonData)
-    } else {
-        fmt.Println("Cache entry exists, Yay!")
     }
 
     locationMap := locationAreaMap{}
