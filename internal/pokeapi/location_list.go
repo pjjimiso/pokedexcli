@@ -19,7 +19,7 @@ func (c *Client) ListLocationAreas(pageURL *string) (locationAreaMap, error) {
 
     jsonData, exists := c.cache.Get(url)
     if !exists {
-        jsonData, err = c.getLocationsFromHTTP(url)
+        jsonData, err = c.requestHTTP(url)
         if err != nil { 
             return locationAreaMap{}, err
         }
@@ -35,7 +35,7 @@ func (c *Client) ListLocationAreas(pageURL *string) (locationAreaMap, error) {
     return locationMap, nil
 }
 
-func (c *Client) getLocationsFromHTTP(url string) ([]byte, error) {
+func (c *Client) requestHTTP(url string) ([]byte, error) {
     req, err := http.NewRequest("GET", url, nil)
     if err != nil { 
         return []byte{}, err

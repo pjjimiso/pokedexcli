@@ -44,6 +44,11 @@ func getCommands() map[string]cliCommand {
             description:    "Paginates backwards through location areas (20 per page)",
             callback:       commandMapb,
         },
+        "explore": { 
+            name:           "explore",
+            description:    "Lists pokemon found in the given location",
+            callback:       commandExplore,
+        }
     }
 }
 
@@ -69,7 +74,11 @@ func startRepl(cfg *config) {
 
         command, exists := getCommands()[commandName]
         if exists {
-            err := command.callback(cfg)
+            if commandName == "explore" {
+                err := command.callback(cfg, words[1])
+            } else {
+                err := command.callback(cfg, nil)
+            }
             if err != nil { 
                 fmt.Println(err)
             }
