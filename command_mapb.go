@@ -3,11 +3,16 @@ package main
 
 import (
     "fmt"
+    "errors"
 )
 
 
-func commandMap(cfg *config, args ...string) error { 
-    laMap, err := cfg.pokeapiClient.ListLocationAreas(cfg.nextLocationsURL)
+func commandMapb(cfg *config, args ...string) error {
+    if cfg.prevLocationsURL == nil || *cfg.prevLocationsURL == "" {
+        return errors.New("you're on the first page")
+    }
+
+    laMap, err := cfg.pokeapiClient.ListLocationAreas(cfg.prevLocationsURL)
     if err != nil { 
         return err
     }
