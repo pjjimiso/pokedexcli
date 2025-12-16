@@ -3,16 +3,14 @@ package pokeapi
 
 import (
     "encoding/json"
-    "net/http"
     "fmt"
 )
 
 
-func (c *Client) ListPokemon(location *string) (error) {
-    if location == nil { 
-        return fmt.Errorf("location not specified")
-    }
+func (c *Client) ListPokemon(location string) (error) {
     url := baseURL + "/location-area/" + location
+
+    var err error
 
     jsonData, exists := c.cache.Get(url)
     if !exists {
