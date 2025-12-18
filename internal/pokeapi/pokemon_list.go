@@ -7,7 +7,7 @@ import (
 )
 
 
-func (c *Client) ListPokemon(location string) (error) {
+func (c *Client) ListPokemon(location string) ([]string, error) {
     url := baseURL + "/location-area/" + location
 
     var err error
@@ -16,19 +16,27 @@ func (c *Client) ListPokemon(location string) (error) {
     if !exists {
         jsonData, err = c.requestHTTP(url)
         if err != nil {
-            return err
+            return nil, err
         }
         c.cache.Add(url, jsonData)
     }
 
+    fmt.Printf("Exploring %s...\n", location)
+
     locationData := locationData{}
     err = json.Unmarshal(jsonData, &locationData)
     if err != nil { 
-        return err
+        return nil, err
     }
 
-    fmt.Println("locationData: ", locationData)
+    fmt.Println("Found Pokemon:")
 
-    return nil
+    for _, encounter := range locationData.PokemonEncounters {
+        fmt.Println(" -", encounter.Pokemon.Name)
+    }
+
+    //pokemonFound := []string{}
+
+    return []string{}, nil
 }
 
