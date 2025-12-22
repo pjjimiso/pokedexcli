@@ -4,6 +4,7 @@ package pokeapi
 import (
     "encoding/json"
     "fmt"
+    "math/rand"
 )
 
 
@@ -28,8 +29,19 @@ func (c *Client) CatchPokemon(pokemon string) error {
     }
 
     fmt.Printf("Throwing a Pokeball at %s...\n", pokemon)
-    
-    // attempt to catch pokemon
+
+    scalingFactor := 200.0
+    baseExp := pokemonStats.BaseExperience
+    catchChance := 1.0 / (1.0 + float64(baseExp) / scalingFactor)
+
+
+    fmt.Printf("%s base_experience is %d, your chance to catch is %d\n", pokemon, baseExp, catchChance)
+
+    if rand.Float64() < catchChance {
+        fmt.Printf("%s was caught!\n", pokemon)
+    } else {
+        fmt.Printf("%s escaped!\n", pokemon)
+    }
 
     return nil
 }
