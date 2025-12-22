@@ -7,7 +7,7 @@ import (
 )
 
 
-func (c *Client) ListPokemon(location string) (error) {
+func (c *Client) ListPokemon(location string) error {
     url := baseURL + "/location-area/" + location
 
     var err error
