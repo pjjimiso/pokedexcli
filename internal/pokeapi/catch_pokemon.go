@@ -30,15 +30,15 @@ func (c *Client) CatchPokemon(pokemon string) error {
 
     fmt.Printf("Throwing a Pokeball at %s...\n", pokemon)
 
-    scalingFactor := 200.0
     baseExp := pokemonStats.BaseExperience
+    scalingFactor := 200.0
     catchChance := 1.0 / (1.0 + float64(baseExp) / scalingFactor)
-
 
     fmt.Printf("%s base_experience is %d, your chance to catch is %d\n", pokemon, baseExp, catchChance)
 
     if rand.Float64() < catchChance {
         fmt.Printf("%s was caught!\n", pokemon)
+        c.pokedex.Add(pokemon)
     } else {
         fmt.Printf("%s escaped!\n", pokemon)
     }
