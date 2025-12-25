@@ -5,8 +5,6 @@ import (
     "encoding/json"
     "fmt"
     "math/rand"
-
-    "github.com/pjjimiso/pokedexcli/internal/pokedex"
 )
 
 
@@ -40,8 +38,7 @@ func (c *Client) CatchPokemon(pokemon string) error {
 
     if rand.Float64() < catchChance {
         fmt.Printf("%s was caught!\n", pokemon)
-        // TODO - create Pokemon to pass in
-        c.pokedex.Add(pokedex.Pokemon{})
+        c.pokedex.Add(pokemon)
     } else {
         fmt.Printf("%s escaped!\n", pokemon)
     }
