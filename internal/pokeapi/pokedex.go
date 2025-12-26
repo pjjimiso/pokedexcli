@@ -1,4 +1,4 @@
-package pokedex
+package pokeapi
 
 
 import( 
@@ -6,25 +6,15 @@ import(
 )
 
 
-type Pokemon struct {
-    name string
-}
-
 type Pokedex map[string]Pokemon
-
-func NewPokemon(name string) Pokemon { 
-    return Pokemon {
-        name: name,
-    }
-}
 
 func NewPokedex() *Pokedex {
     pokedex := make(Pokedex)
     return &pokedex
 }
 
-func (p Pokedex) Add(name string) {
-    p[name] = NewPokemon(name)
+func (p Pokedex) Add(pokemon Pokemon) {
+    p[pokemon.Name] = pokemon
     p.List()
 }
 
@@ -35,6 +25,6 @@ func (p Pokedex) List() {
 
     fmt.Println("You've captured the following Pokemon:")
     for _, pokemon := range p { 
-        fmt.Printf(" - %s\n", pokemon.name)
+        fmt.Printf(" - %s\n", pokemon.Name)
     }
 }
