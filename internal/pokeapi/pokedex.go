@@ -18,6 +18,15 @@ func (p Pokedex) Add(pokemon Pokemon) {
     p.List()
 }
 
+func (p Pokedex) Get(name string) (Pokemon, error) { 
+    pokemon, exists := p[name]
+    if !exists {
+        return Pokemon{}, fmt.Errorf("you have not caught that Pokemon")
+    }
+
+    return pokemon, nil
+}
+
 func (p Pokedex) List() {
     if len(p) == 0 { 
         fmt.Println("You haven't captured any Pokemon!")
