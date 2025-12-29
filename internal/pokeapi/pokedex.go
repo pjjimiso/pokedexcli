@@ -15,13 +15,12 @@ func NewPokedex() *Pokedex {
 
 func (p Pokedex) Add(pokemon Pokemon) {
     p[pokemon.Name] = pokemon
-    p.List()
 }
 
 func (p Pokedex) Get(name string) (Pokemon, error) { 
     pokemon, exists := p[name]
     if !exists {
-        return Pokemon{}, fmt.Errorf("you have not caught that Pokemon")
+        return Pokemon{}, fmt.Errorf("you have not caught that pokemon")
     }
 
     return pokemon, nil

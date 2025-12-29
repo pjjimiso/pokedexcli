@@ -1,5 +1,6 @@
 package main
 
+
 import (
     "strings"
     "bufio"
@@ -53,6 +54,11 @@ func getCommands() map[string]cliCommand {
             name:           "catch", 
             description:    "Attempts to catch the specified pokemon",
             callback:       commandCatch,
+        },
+        "inspect": {
+            name:           "inspect",
+            description:    "See details about the specified pokemon",
+            callback:       commandInspect,
         },
     }
 }
