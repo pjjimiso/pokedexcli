@@ -26,13 +26,15 @@ func (p Pokedex) Get(name string) (Pokemon, error) {
     return pokemon, nil
 }
 
-func (p Pokedex) List() {
+func (p Pokedex) List() error {
     if len(p) == 0 { 
-        fmt.Println("You haven't captured any Pokemon!")
+        return fmt.Errorf("You haven't captured any Pokemon!")
     }
 
-    fmt.Println("You've captured the following Pokemon:")
+    fmt.Println("Your Pokemon:")
     for _, pokemon := range p { 
         fmt.Printf(" - %s\n", pokemon.Name)
     }
+
+    return nil
 }
